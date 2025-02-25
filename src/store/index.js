@@ -3,9 +3,11 @@
 // configureStore 是一个用于创建 Redux store 的函数，它简化了配置过程
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './counterSlice';
+import todosReducer from './toDoListSlice';
 
 export default configureStore({
   reducer: {
     counter: counterReducer,
+    todos: todosReducer,
   },
 });

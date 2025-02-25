@@ -3,6 +3,7 @@ import Layout from '../components/Layout';
 import Home from '../components/Home';
 import About from '../components/About';
 import Counter from '../components/Counter';
+import ToDoList from '../components/ToDoList';
 
 const router = createBrowserRouter([
   {
@@ -12,6 +13,7 @@ const router = createBrowserRouter([
       { index: true, element: <Home /> },
       { path: 'about', element: <About /> },
       { path: 'counter', element: <Counter /> },
+      { path: 'list', element: <ToDoList /> },
     ],
   },
 ]);
