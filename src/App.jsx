@@ -1,4 +1,5 @@
 import Router from './router';
+import styles from './App.module.scss';
 
 export default function App() {
   // 从环境变量中获取API的URL
@@ -9,8 +10,8 @@ export default function App() {
   // 如果你想要在所有模式下都使用相同的环境变量，
   // 你可以在.env文件中定义这些变量，因为.env文件在所有模式下都会被加载。
   return (
-    <div>
-      <h1>Hello Vite + React!</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Hello Vite + React!</h1>
       <Router />
     </div>
   );

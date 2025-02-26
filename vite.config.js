@@ -16,7 +16,20 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': '/src',
+      '@': '/src', // 必须显式声明别名
+    },
+  },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // 将styles/variables.scss文件中定义的scss变量导入到所有scss文件中（便于复制引用）
+        // 使用 @use 规则引入外部样式文件
+        // "@/styles/variables" 是相对路径，指向项目中的样式变量文件
+        // as * 表示将文件中的所有导出内容引入当前文件，并可以直接使用
+        additionalData: `
+        @use "@/styles/variables" as *;
+      `,
+      },
     },
   },
   server: {
