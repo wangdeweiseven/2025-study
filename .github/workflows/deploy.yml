@@ -77,11 +77,11 @@ jobs:
         run: |
           echo "Deploying to Production..."
 
-      # 步骤10：发送成功通知
+        # 步骤10：发送成功通知
       - name: Send Success Notification
         if: success()
-        uses: actions/telegram@v1
+        uses: appleboy/telegram-action@v1.0.0
         with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          chat_id: ${{ secrets.TELEGRAM_CHAT_ID }}
           message: '✅ 部署成功！'
