@@ -77,7 +77,7 @@ jobs:
         run: |
           echo "Deploying to Production..."
 
-        # 步骤10：发送成功通知
+      # 步骤10：发送成功通知
       - name: Send Success Notification
         if: success()
         uses: appleboy/telegram-action@v1.0.0
