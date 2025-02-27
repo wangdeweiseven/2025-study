@@ -35,6 +35,10 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  preview: {
+    port: 4173,
+    strictPort: true,
+  },
   // 定义一个名为 "test" 的配置对象，用于配置测试环境的相关设置
   test: {
     // 设置全局变量为 true，表示在测试环境中可以使用全局变量

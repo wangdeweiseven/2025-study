@@ -1,0 +1,21 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+// 文件用于定义和维护项目中的代码风格和格式化规则。它帮助不同的编辑器和 IDE 保持一致的编码风格
+# top-most EditorConfig file
+# 指定这是根配置文件，不再向上查找其他 .editorconfig 文件
+root = true
+
+# 对所有文件应用以下配置
+[*]
+# 使用空格进行缩进
+indent_style = space
+# 缩进大小为4个空格
+indent_size = 4
+# 行尾使用 LF (Line Feed) 作为换行符
+end_of_line = lf
+# 文件编码使用 UTF-8
+charset = utf-8
+# 不自动删除行尾的空白字符
+trim_trailing_whitespace = false
+# 不自动在文件末尾插入新行
+insert_final_newline = false
