@@ -8,20 +8,20 @@ export default defineConfig({
   // 如果是生产环境（production），则基础路径为'/2025-study/'，否则为根路径'/'
   base: process.env.NODE_ENV === 'production' ? '/2025-study/' : '/',
   // 配置构建选项
-  // build: {
-  //   // 指定静态资源目录为'static'
-  //   assetsDir: 'static',
-  //   // 配置Rollup打包选项
-  //   rollupOptions: {
-  //     // 配置输出选项
-  //     output: {
-  //       // 指定静态资源文件的命名规则
-  //       // 文件名格式为'static/[name]-[hash][extname]'
-  //       // 其中[name]是原始文件名，[hash]是文件内容的哈希值，[extname]是文件扩展名
-  //       assetFileNames: 'static/[name]-[hash][extname]',
-  //     },
-  //   },
-  // },
+  build: {
+    // 指定静态资源目录为'static'
+    assetsDir: 'static',
+    // 配置Rollup打包选项
+    rollupOptions: {
+      // 配置输出选项
+      output: {
+        // 指定静态资源文件的命名规则
+        // 文件名格式为'static/[name]-[hash][extname]'
+        // 其中[name]是原始文件名，[hash]是文件内容的哈希值，[extname]是文件扩展名
+        assetFileNames: 'static/[name]-[hash][extname]',
+      },
+    },
+  },
   plugins: [
     react({
       // 指定使用经典的JSX运行时
