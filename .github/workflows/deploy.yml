@@ -32,7 +32,7 @@ jobs:
       - name: Configure SSH
         uses: webfactory/ssh-agent@v0.7.0
         with:
-          ssh-private-key: ${{ secrets.API_TOKEN }} # 注入私钥
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # 注入私钥
 
       # 步骤5：传输文件到服务器
       - name: Deploy via SSH
