@@ -10,6 +10,11 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest # 使用 GitHub 提供的虚拟机环境
+    # 新增权限声明
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
       # 步骤1：检出代码
@@ -33,6 +38,10 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          publish_branch: gh-pages # 显式指定目标分支
+          force_orphan: true # 强制清理历史记录
+          cname: yourdomain.com # 如果有自定义域名
+
 
     #   # 步骤4：配置 SSH 连接
     #   - name: Configure SSH
