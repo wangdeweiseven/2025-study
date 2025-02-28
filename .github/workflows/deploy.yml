@@ -33,14 +33,30 @@ jobs:
           npm ci               # 精确安装依赖（类似 npm install）
           npm run build        # 执行构建命令（根据实际项目调整）
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy to GitHub Pages # 定义一个名为 "Deploy to GitHub Pages" 的步骤
+        uses: peaceiris/actions-gh-pages@v3 # 使用 peaceiris 的 actions-gh-pages 动作，版本为 v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages # 显式指定目标分支
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 使用 GitHub 密钥进行身份验证
+          publish_dir: ./dist # 指定要发布的目录为当前项目的 ./dist 目录
+          publish_branch: gh-pages # 显式指定目标分支为 gh-pages，即发布到 GitHub Pages 使用的分支
           force_orphan: true # 强制清理历史记录
         #   cname: yourdomain.com # 如果有自定义域名
+
+      - name: Check Path References
+        run: |
+          grep -r 'assets/index-' ./dist
+          grep -r '/assets/' ./dist -l | xargs sed -i 's|/assets/|./assets/|g'
+
+      - name: Purge Cloudflare Cache
+        if: success()
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"files":["https://wangdeweiseven.github.io/*"]}'
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
 
     #   # 步骤4：配置 SSH 连接
     #   - name: Configure SSH
