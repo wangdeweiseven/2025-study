@@ -28,60 +28,66 @@ jobs:
           npm ci               # 精确安装依赖（类似 npm install）
           npm run build        # 执行构建命令（根据实际项目调整）
 
-      # 步骤4：配置 SSH 连接
-      - name: Configure SSH
-        uses: webfactory/ssh-agent@v0.7.0
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # 注入私钥
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
 
-      # 步骤5：传输文件到服务器
-      - name: Deploy via SSH
-        run: |
-          # 创建服务器目录（如果不存在）
-          ssh -o StrictHostKeyChecking=accept-new \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-            "mkdir -p ${{ secrets.PROJECT_PATH }}"
+    #   # 步骤4：配置 SSH 连接
+    #   - name: Configure SSH
+    #     uses: webfactory/ssh-agent@v0.7.0
+    #     with:
+    #       ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # 注入私钥
 
-          # 同步文件到服务器（排除 node_modules）
-          rsync -avz --delete \
-            --exclude='node_modules/' \
-            --exclude='.git/' \
-            --exclude='.env' \
-            ./ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.PROJECT_PATH }}
+    #   # 步骤5：传输文件到服务器
+    #   - name: Deploy via SSH
+    #     run: |
+    #       # 创建服务器目录（如果不存在）
+    #       ssh -o StrictHostKeyChecking=accept-new \
+    #         ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+    #         "mkdir -p ${{ secrets.PROJECT_PATH }}"
 
-      # 步骤6：在服务器执行部署命令
-      - name: Restart Service
-        run: |
-          ssh -o StrictHostKeyChecking=accept-new \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-            "cd ${{ secrets.PROJECT_PATH }} && \
-             npm ci --production && \
-             pm2 restart ecosystem.config.js || echo 'PM2 restart failed, continuing...'"
+    #       # 同步文件到服务器（排除 node_modules）
+    #       rsync -avz --delete \
+    #         --exclude='node_modules/' \
+    #         --exclude='.git/' \
+    #         --exclude='.env' \
+    #         ./ \
+    #         ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.PROJECT_PATH }}
 
-      # 步骤7：运行测试
-      - name: Run Tests
-        run: npm test
-        env:
-          CI: true # 适用于 Jest/Vitest 等测试框架
+    #   # 步骤6：在服务器执行部署命令
+    #   - name: Restart Service
+    #     run: |
+    #       ssh -o StrictHostKeyChecking=accept-new \
+    #         ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+    #         "cd ${{ secrets.PROJECT_PATH }} && \
+    #          npm ci --production && \
+    #          pm2 restart ecosystem.config.js || echo 'PM2 restart failed, continuing...'"
 
-      # 步骤8：部署到 Staging
-      - name: Deploy to Staging
-        if: github.ref == 'refs/heads/develop'
-        run: |
-          echo "Deploying to Staging..."
+    #   # 步骤7：运行测试
+    #   - name: Run Tests
+    #     run: npm test
+    #     env:
+    #       CI: true # 适用于 Jest/Vitest 等测试框架
 
-      # 步骤9：部署到 Production
-      - name: Deploy to Production
-        if: github.ref == 'refs/heads/main'
-        run: |
-          echo "Deploying to Production..."
+    #   # 步骤8：部署到 Staging
+    #   - name: Deploy to Staging
+    #     if: github.ref == 'refs/heads/develop'
+    #     run: |
+    #       echo "Deploying to Staging..."
 
-      # 步骤10：发送成功通知
-      - name: Send Success Notification
-        if: success()
-        uses: appleboy/telegram-action@v1.0.0
-        with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: '✅ 部署成功！'
+    #   # 步骤9：部署到 Production
+    #   - name: Deploy to Production
+    #     if: github.ref == 'refs/heads/main'
+    #     run: |
+    #       echo "Deploying to Production..."
+
+    #   # 步骤10：发送成功通知
+    #   - name: Send Success Notification
+    #     if: success()
+    #     uses: appleboy/telegram-action@v1.0.0
+    #     with:
+    #       to: ${{ secrets.TELEGRAM_CHAT_ID }}
+    #       token: ${{ secrets.TELEGRAM_TOKEN }}
+    #       message: '✅ 部署成功！'
