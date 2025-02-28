@@ -38,10 +38,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
-          publish_branch: gh-pages # 显式指定目标分支
+          publish_branch: main # 显式指定目标分支
           force_orphan: true # 强制清理历史记录
-          cname: yourdomain.com # 如果有自定义域名
-
+        #   cname: yourdomain.com # 如果有自定义域名
 
     #   # 步骤4：配置 SSH 连接
     #   - name: Configure SSH
