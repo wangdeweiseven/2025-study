@@ -3,15 +3,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "App.js",
+  "homepage": "https://wangdeweiseven.github.io/2025-study/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": " vite preview",
+    "preview": " npm run build && vite preview",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx--fix",
     "format": "prettier --write src/**/*.{js,jsx,css,scss}",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,7 @@
   "license": "ISC",
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
+    "gh-pages": "^6.3.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
@@ -58,6 +62,13 @@
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
       "git add"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
     ]
   }
 }

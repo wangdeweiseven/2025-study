@@ -10,6 +10,11 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest # 使用 GitHub 提供的虚拟机环境
+    # 新增权限声明
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
       # 步骤1：检出代码
@@ -28,32 +33,85 @@ jobs:
           npm ci               # 精确安装依赖（类似 npm install）
           npm run build        # 执行构建命令（根据实际项目调整）
 
-      # 步骤4：配置 SSH 连接
-      - name: Configure SSH
-        uses: webfactory/ssh-agent@v0.7.0
+      - name: Deploy to GitHub Pages # 定义一个名为 "Deploy to GitHub Pages" 的步骤
+        uses: peaceiris/actions-gh-pages@v3 # 使用 peaceiris 的 actions-gh-pages 动作，版本为 v3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # 注入私钥
+          github_token: ${{ secrets.GITHUB_TOKEN }} # 使用 GitHub 密钥进行身份验证
+          publish_dir: ./dist # 指定要发布的目录为当前项目的 ./dist 目录
+          publish_branch: gh-pages # 显式指定目标分支为 gh-pages，即发布到 GitHub Pages 使用的分支
+          force_orphan: true # 强制清理历史记录
+        #   cname: yourdomain.com # 如果有自定义域名
 
-      # 步骤5：传输文件到服务器
-      - name: Deploy via SSH
+      - name: Check Path References
         run: |
-          # 创建服务器目录（如果不存在）
-          ssh -o StrictHostKeyChecking=no \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-            "mkdir -p ${{ secrets.PROJECT_PATH }}"
+          grep -r 'assets/index-' ./dist
+          grep -r '/assets/' ./dist -l | xargs sed -i 's|/assets/|./assets/|g'
 
-          # 同步文件到服务器（排除 node_modules）
-          rsync -avz --delete \
-            --exclude='node_modules/' \
-            --exclude='.git/' \
-            ./ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.PROJECT_PATH }}
-
-      # 步骤6：在服务器执行部署命令
-      - name: Restart Service
+      - name: Purge Cloudflare Cache
+        if: success()
         run: |
-          ssh -o StrictHostKeyChecking=no \
-            ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
-            "cd ${{ secrets.PROJECT_PATH }} && \
-             npm ci --production && \
-             pm2 restart ecosystem.config.js"  # 根据实际 PM2 配置调整
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${CF_ZONE_ID}/purge_cache" \
+            -H "Authorization: Bearer ${CF_API_TOKEN}" \
+            -H "Content-Type: application/json" \
+            --data '{"files":["https://wangdeweiseven.github.io/*"]}'
+        env:
+          CF_ZONE_ID: ${{ secrets.CF_ZONE_ID }}
+          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+
+    #   # 步骤4：配置 SSH 连接
+    #   - name: Configure SSH
+    #     uses: webfactory/ssh-agent@v0.7.0
+    #     with:
+    #       ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} # 注入私钥
+
+    #   # 步骤5：传输文件到服务器
+    #   - name: Deploy via SSH
+    #     run: |
+    #       # 创建服务器目录（如果不存在）
+    #       ssh -o StrictHostKeyChecking=accept-new \
+    #         ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+    #         "mkdir -p ${{ secrets.PROJECT_PATH }}"
+
+    #       # 同步文件到服务器（排除 node_modules）
+    #       rsync -avz --delete \
+    #         --exclude='node_modules/' \
+    #         --exclude='.git/' \
+    #         --exclude='.env' \
+    #         ./ \
+    #         ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.PROJECT_PATH }}
+
+    #   # 步骤6：在服务器执行部署命令
+    #   - name: Restart Service
+    #     run: |
+    #       ssh -o StrictHostKeyChecking=accept-new \
+    #         ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} \
+    #         "cd ${{ secrets.PROJECT_PATH }} && \
+    #          npm ci --production && \
+    #          pm2 restart ecosystem.config.js || echo 'PM2 restart failed, continuing...'"
+
+    #   # 步骤7：运行测试
+    #   - name: Run Tests
+    #     run: npm test
+    #     env:
+    #       CI: true # 适用于 Jest/Vitest 等测试框架
+
+    #   # 步骤8：部署到 Staging
+    #   - name: Deploy to Staging
+    #     if: github.ref == 'refs/heads/develop'
+    #     run: |
+    #       echo "Deploying to Staging..."
+
+    #   # 步骤9：部署到 Production
+    #   - name: Deploy to Production
+    #     if: github.ref == 'refs/heads/main'
+    #     run: |
+    #       echo "Deploying to Production..."
+
+    #   # 步骤10：发送成功通知
+    #   - name: Send Success Notification
+    #     if: success()
+    #     uses: appleboy/telegram-action@v1.0.0
+    #     with:
+    #       to: ${{ secrets.TELEGRAM_CHAT_ID }}
+    #       token: ${{ secrets.TELEGRAM_TOKEN }}
+    #       message: '✅ 部署成功！'
