@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import '@ant-design/v5-patch-for-react-19';
+
 import store from './store';
 import App from './App';
 

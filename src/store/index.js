@@ -4,10 +4,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import counterReducer from './counterSlice';
 import todosReducer from './toDoListSlice';
+import layoutReducer from './layoutSlice';
 
 export default configureStore({
   reducer: {
     counter: counterReducer,
     todos: todosReducer,
+    layout: layoutReducer,
   },
 });

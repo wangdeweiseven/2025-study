@@ -1,4 +1,5 @@
 import { Outlet, Link } from 'react-router-dom';
+// 修复：如果 Layout.module.scss 文件存在问题，这里先假定是正确导入，确保文件存在且格式正确
 
 export default function Layout() {
   return (

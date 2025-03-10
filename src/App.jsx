@@ -1,18 +1,98 @@
-import Router from './router';
-import styles from './App.module.scss';
+import { useCallback, useState } from 'react';
+import { Breadcrumb, Layout, Menu } from 'antd';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import {
+  DesktopOutlined,
+  FileOutlined,
+  PieChartOutlined,
+  TeamOutlined,
+} from '@ant-design/icons';
+import { useSelector, useDispatch } from 'react-redux';
+import Home from './components/Home';
+import About from './components/About';
+import ToDoList from './components/ToDoList';
+import Counter from './components/Counter';
+
+import { setCompomemt } from './store/layoutSlice';
+import './App.scss';
+
+const { Header, Content, Footer, Sider } = Layout;
 
 export default function App() {
-  // 从环境变量中获取API的URL
-  // 使用import.meta.env访问Vite配置的环境变量
-  // VITE_API_URL是在Vite项目中定义的一个环境变量，用于存储API的URL
-  // 例如，如果你在开发模式下运行项目，Vite会加载.env.development文件；
-  // 如果你在生产模式下运行项目，Vite会加载.env.production文件。
-  // 如果你想要在所有模式下都使用相同的环境变量，
-  // 你可以在.env文件中定义这些变量，因为.env文件在所有模式下都会被加载。
+  const [collapsed, setCollapsed] = useState(false);
+  const curComponent = useSelector((state) => state.layout.curComponent);
+  const dispatch = useDispatch();
+
+  const renderCom = useCallback(() => {
+    switch (curComponent) {
+      case 'home':
+        return <Home />;
+      case 'about':
+        return <About />;
+      case 'todoList':
+        return <ToDoList />;
+      case 'counter':
+        return <Counter />;
+      default:
+        return <div>组件未加载，请排查异常</div>;
+    }
+  }, [curComponent]);
+
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Hello Vite + React!</h1>
-      <Router />
-    </div>
+    <Layout className="react-vite-layout" style={{ minHeight: '100vh' }}>
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div className="demo-logo-vertical" />
+        <Menu
+          theme="dark"
+          defaultSelectedKeys={['home']}
+          mode="inline"
+          onClick={(item) => {
+            dispatch(setCompomemt(item.key));
+          }}
+          selectedKeys={[curComponent]}
+          items={[
+            {
+              key: 'home',
+              icon: <PieChartOutlined />,
+              label: <span>Home</span>,
+            },
+            {
+              key: 'about',
+              icon: <DesktopOutlined />,
+              label: <span>About</span>,
+            },
+            {
+              key: 'todoList',
+              icon: <FileOutlined />,
+              label: 'ToDoList',
+            },
+            {
+              key: 'counter',
+              icon: <TeamOutlined />,
+              label: 'counter',
+            },
+          ]}
+        />
+      </Sider>
+      <Layout>
+        <Header style={{ padding: 0 }}>
+          <div className="react-vite-layout-header">此处为大标题位置</div>
+        </Header>
+        <Content style={{ margin: '0 16px' }}>
+          <Breadcrumb style={{ margin: '16px 0' }}>
+            <Breadcrumb.Item>User</Breadcrumb.Item>
+            <Breadcrumb.Item>Bill</Breadcrumb.Item>
+          </Breadcrumb>
+          <div>{renderCom()}</div>
+        </Content>
+        <Footer style={{ textAlign: 'center' }}>
+          Ant Design ©{new Date().getFullYear()} Created by Ant UED
+        </Footer>
+      </Layout>
+    </Layout>
   );
 }

@@ -1,0 +1,16 @@
+@use 'sass:color';
+// 主色系全局变量（使用!default且前置）
+
+// 定义一个可继承的 flex 布局 mixin
+@mixin flex-layout(
+  $justify: center,
+  $align: center,
+  $direction: row,
+  $wrap: nowrap
+) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $direction;
+  flex-wrap: $wrap;
+}
