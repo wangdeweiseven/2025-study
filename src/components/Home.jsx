@@ -9,7 +9,7 @@ export default function Home() {
     // setLoading(true);
     fetch(
       import.meta.env.PROD
-        ? '/2025-study/public/interview-notes.md'
+        ? '/2025-study/dist/interview-notes.md'
         : '/public/interview-notes.md'
     )
       .then((response) => response.text())
