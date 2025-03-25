@@ -7,7 +7,11 @@ export default function Home() {
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
     // setLoading(true);
-    fetch('/public/interview-notes.md')
+    fetch(
+      import.meta.env.PROD
+        ? '/2025-study/public/interview-notes.md'
+        : '/public/interview-notes.md'
+    )
       .then((response) => response.text())
       .then((text) => setMarkdownContent(text))
       .then(() => setLoading(false));
