@@ -26,8 +26,16 @@ export default defineConfig({
           if (assetInfo.fileName?.endsWith('.css')) {
             return 'static/css/[name]-[hash][extname]';
           }
+
+          if (assetInfo.name?.endsWith('.md')) {
+            return 'static/docs/[name]-[hash][extname]';
+          }
+
           return 'static/[name]-[hash][extname]';
         },
+        // 新增入口文件命名规则
+        entryFileNames: 'static/js/[name]-[hash].js',
+        chunkFileNames: 'static/js/[name]-[hash].js',
       },
     },
   },

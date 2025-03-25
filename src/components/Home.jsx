@@ -9,8 +9,8 @@ export default function Home() {
     // setLoading(true);
     fetch(
       import.meta.env.PROD
-        ? '/2025-study/dist/interview-notes.md'
-        : '/public/interview-notes.md'
+        ? `${import.meta.env.BASE_URL}/interview-notes.md`
+        : '/interview-notes.md'
     )
       .then((response) => response.text())
       .then((text) => setMarkdownContent(text))
