@@ -34,7 +34,8 @@ jobs:
           npm run build        # 执行构建命令（根据实际项目调整）
 
       - name: Deploy to GitHub Pages # 定义一个名为 "Deploy to GitHub Pages" 的步骤
-        uses: peaceiris/actions-gh-pages@v3 # 使用 peaceiris 的 actions-gh-pages 动作，版本为 v3
+        # 修改为使用可用的版本或最新版本
+        uses: peaceiris/actions-gh-pages@v3 # 使用 peaceiris 的 actions-gh-pages 动作，版本为 v3，因 v4 无法解析，更换为 v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }} # 使用 GitHub 密钥进行身份验证
           publish_dir: ./dist # 指定要发布的目录为当前项目的 ./dist 目录
