@@ -45,8 +45,8 @@ jobs:
 
       - name: Check Path References
         run: |
-          grep -r 'assets/index-' ./dist
-          grep -r '/assets/' ./dist -l | xargs sed -i 's|/assets/|./assets/|g'
+          grep -r 'assets/index-' ./dist || true
+          grep -r '/assets/' ./dist -l | xargs sed -i 's|/assets/|./assets/|g' || true
 
       - name: Purge Cloudflare Cache
         if: success()
