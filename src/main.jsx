@@ -6,6 +6,8 @@ import '@ant-design/v5-patch-for-react-19';
 
 import store from './store';
 import App from './App';
+// import Game from './components/game';
+// 渲染应用
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   // 使用React的StrictMode组件，这个组件可以帮助检测潜在的问题，例如使用过时的API、不安全的生命周期方法等
@@ -15,6 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <Provider store={store}>
       {/* App组件是应用的根组件，它将包含所有的子组件和页面 */}
       <App />
+      {/* <Game /> */}
     </Provider>
   </React.StrictMode>
 );

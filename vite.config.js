@@ -41,6 +41,8 @@ export default defineConfig({
     // 使用 svgr() 函数，该函数通常用于将 SVG 文件转换为 React 组件
     svgr(),
   ],
+  // 将 Markdown 文件视为静态资源
+  assetsInclude: ['**/*.md'],
   resolve: {
     alias: {
       '@': '/src', // 必须显式声明别名

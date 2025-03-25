@@ -1,4 +1,13 @@
 @use 'sass:color';
+@import 'highlight.js/styles/atom-one-dark.css'; // Atom One Dark 主题
+// @import 'highlight.js/styles/darcula.css'; // Darcula 主题
+// @import 'highlight.js/styles/monokai-sublime.css'; // Monokai Sublime 主题
+// @import 'highlight.js/styles/solarized-dark.css'; // Solarized Dark 主题
+// @import 'highlight.js/styles/solarized-light.css'; // Solarized Light 主题
+// @import 'highlight.js/styles/tomorrow-night.css'; // Tomorrow Night 主题
+// @import 'highlight.js/styles/vs2015.css'; // Visual Studio 2015 主题
+// @import 'highlight.js/styles/xcode.css'; // Xcode 主题
+
 // 主色系全局变量（使用!default且前置）
 
 // 定义一个可继承的 flex 布局 mixin

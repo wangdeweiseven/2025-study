@@ -19,7 +19,7 @@ import './App.scss';
 const { Header, Content, Footer, Sider } = Layout;
 
 export default function App() {
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(true);
   const curComponent = useSelector((state) => state.layout.curComponent);
   const dispatch = useDispatch();
 
