@@ -1,21 +1,20 @@
 import { useEffect, useState } from 'react';
 import { Spin } from 'antd';
-import MarkdownWithTOC from './MarkdownRenderer';
+// import MarkdownWithTOC from './MarkdownRenderer';
 
 export default function Home() {
   const [markdownContent, setMarkdownContent] = useState('');
-  const [isLoading, setLoading] = useState(true);
-  useEffect(() => {
-    // setLoading(true);
-    fetch(
-      import.meta.env.PROD
-        ? `${import.meta.env.BASE_URL}/interview-notes.md`
-        : '/interview-notes.md'
-    )
-      .then((response) => response.text())
-      .then((text) => setMarkdownContent(text))
-      .then(() => setLoading(false));
-  }, []);
+  const [isLoading, setLoading] = useState(false);
+  // useEffect(() => {
+  //   fetch(
+  //     import.meta.env.PROD
+  //       ? `${import.meta.env.BASE_URL}/interview-notes.md`
+  //       : '/interview-notes.md'
+  //   )
+  //     .then((response) => response.text())
+  //     .then((text) => setMarkdownContent(text))
+  //     .then(() => setLoading(false));s
+  // }, []);
 
   return (
     <div className="home-container">
@@ -26,7 +25,7 @@ export default function Home() {
         wrapperClassName="home-container-spin"
       >
         <h1>Markdown</h1>
-        <MarkdownWithTOC content={markdownContent} />
+        {/* <MarkdownWithTOC content={markdownContent} /> */}
       </Spin>
     </div>
   );
