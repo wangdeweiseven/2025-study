@@ -1,32 +1,21 @@
-import { useEffect, useState } from 'react';
-import { Spin } from 'antd';
-// import MarkdownWithTOC from './MarkdownRenderer';
+import VirtualList from './virtual-list';
 
 export default function Home() {
-  const [markdownContent, setMarkdownContent] = useState('');
-  const [isLoading, setLoading] = useState(false);
-  // useEffect(() => {
-  //   fetch(
-  //     import.meta.env.PROD
-  //       ? `${import.meta.env.BASE_URL}/interview-notes.md`
-  //       : '/interview-notes.md'
-  //   )
-  //     .then((response) => response.text())
-  //     .then((text) => setMarkdownContent(text))
-  //     .then(() => setLoading(false));s
-  // }, []);
+  // 生成测试数据（10000条）
+  const mockItems = Array.from({ length: 10000 }, (_, i) => ({
+    id: i,
+    content: `Item ${i + 1}`,
+  }));
 
   return (
     <div className="home-container">
-      <Spin
-        tip="文档正在加载中..."
-        size="large"
-        spinning={isLoading}
-        wrapperClassName="home-container-spin"
-      >
-        <h1>Markdown</h1>
-        {/* <MarkdownWithTOC content={markdownContent} /> */}
-      </Spin>
+      {
+        <VirtualList
+          items={mockItems}
+          itemHeight={50} // 每项高度
+          visibleCount={10} // 可见项数量（容器高度 = visibleCount * itemHeight）
+        />
+      }
     </div>
   );
 }
